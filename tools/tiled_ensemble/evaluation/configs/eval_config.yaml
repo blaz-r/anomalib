@@ -1,0 +1,78 @@
+seeds:
+  - 42
+  - 5125
+  - 33
+  - 1515
+  - 7711
+
+architectures:
+  - padim
+  - fastflow
+  - reverse_distillation
+  - stfpm
+  - patchcore
+
+setups:
+  one_256:
+    basic_tiling: False
+    image_size: 256
+
+  one_512:
+    basic_tiling: False
+    image_size: 512
+
+  one_tiled_9:
+    basic_tiling: True
+    image_size: 512
+    tile_size: 256
+    stride: 128
+
+  one_tiled_4:
+    basic_tiling: True
+    image_size: 512
+    tile_size: 256
+    stride: 256
+
+  ens_9:
+    basic_tiling: False
+    image_size: 512
+    tile_size: 256
+    stride: 128
+
+  ens_4:
+    basic_tiling: False
+    image_size: 512
+    tile_size: 256
+    stride: 256
+
+
+datasets:
+  mvtec:
+    - bottle
+    - cable
+    - capsule
+    - carpet
+    - grid
+    - hazelnut
+    - leather
+    - metal_nut
+    - pill
+    - screw
+    - tile
+    - toothbrush
+    - transistor
+    - wood
+    - zipper
+  visa:
+    - candle
+    - capsules
+    - cashew
+    - chewinggum
+    - fryum
+    - macaroni1
+    - macaroni2
+    - pcb1
+    - pcb2
+    - pcb3
+    - pcb4
+    - pipe_fryum
