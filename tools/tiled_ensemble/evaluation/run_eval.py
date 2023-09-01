@@ -148,7 +148,7 @@ def train_all_from_conf():
                                 csv_file.flush()
                             except Exception:
                                 with open(ERRORS_PATH / f"{arch}_err.log", "a") as err_file:
-                                    err_file.write(f"{datetime.now()} - {dataset} - {cat} {traceback.format_exc()}\n")
+                                    err_file.write(f"{datetime.now()} - [{setup} - {dataset} - {cat}] {traceback.format_exc()}\n")
                                     print(traceback.format_exc())
 
 
