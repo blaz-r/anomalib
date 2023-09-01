@@ -43,7 +43,7 @@ metrics:
   pixel:
     - F1Score
     - AUROC
-    - AURPO
+    - AUPRO
     - PRO
   threshold:
     method: adaptive #options: [adaptive, manual]
