@@ -145,6 +145,13 @@ def get_callbacks(config: DictConfig | ListConfig) -> list[Callback]:
     if config.logging.log_graph not in (None, False):
         callbacks.append(GraphLogger())
 
+    tiling = TilerConfigurationCallback(
+        enable=config.dataset.tiling.apply,
+        tile_size=config.dataset.tiling.tile_size,
+        stride=config.dataset.tiling.stride,
+    )
+    callbacks.append(tiling)
+
     return callbacks
 
 

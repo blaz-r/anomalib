@@ -9,6 +9,7 @@ results.
 # SPDX-License-Identifier: Apache-2.0
 
 import logging
+import time
 import warnings
 from argparse import ArgumentParser, Namespace
 
@@ -45,6 +46,8 @@ def train(args: Namespace):
         args (Namespace): The arguments from the command line.
     """
 
+    start_time = time.time()
+
     configure_logger(level=args.log_level)
 
     if args.log_level == "ERROR":
@@ -71,7 +74,20 @@ def train(args: Namespace):
         logger.info("No test set provided. Skipping test stage.")
     else:
         logger.info("Testing the model.")
-        trainer.test(model=model, datamodule=datamodule)
+
+        test_start_time = time.time()
+
+        results = trainer.test(model=model, datamodule=datamodule)[0]
+
+        end_time = time.time()
+
+        total_duration = end_time - start_time
+        test_duration = end_time - test_start_time
+
+        results["total_time"] = total_duration
+        results["test_time"] = test_duration
+
+        return results
 
 
 if __name__ == "__main__":

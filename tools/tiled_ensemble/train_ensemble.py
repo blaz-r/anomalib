@@ -8,7 +8,12 @@ results.
 # Copyright (C) 2023 Intel Corporation
 # SPDX-License-Identifier: Apache-2.0
 
+import sys
+
+sys.path.append(".")
+
 import logging
+import time
 import warnings
 from argparse import ArgumentParser, Namespace
 from itertools import product
@@ -55,6 +60,8 @@ def train(args: Namespace):
     Args:
         args (Namespace): The arguments from the command line.
     """
+    start_time = time.time()
+    total_test_duration = 0
 
     configure_logger(level=args.log_level)
 
@@ -106,10 +113,17 @@ def train(args: Namespace):
             logger.info("No test set provided. Skipping prediction on test data.")
         else:
             logger.info("Predicting on predict test data.")
+
+            test_start_time = time.time()
+
             current_predictions = trainer.predict(
                 model=model, dataloaders=datamodule.test_dataloader(), ckpt_path="best"
             )
             ensemble_predictions.add_tile_prediction(tile_index, current_predictions)
+
+            test_predict_duration = time.time() - test_start_time
+            # accumulate test time over all models
+            total_test_duration += test_predict_duration
 
         # if val data == test data, or no validation data is provided - don't compute
         if config.dataset.val_split_mode not in [ValSplitMode.SAME_AS_TEST, ValSplitMode.NONE]:
@@ -120,13 +134,24 @@ def train(args: Namespace):
             validation_predictions.add_tile_prediction(tile_index, current_val_predictions)
 
     # postprocess, visualization and metric pipeline
-    computed_metrics = post_process(
+    results, test_pipe_start = post_process(
         config=config,
         tiler=tiler,
         ensemble_predictions=ensemble_predictions,
         validation_predictions=validation_predictions,
     )
-    log_metrics(computed_metrics)
+    log_metrics(results)
+
+    end_time = time.time()
+
+    total_duration = end_time - start_time
+    # get duration from start time returned (this way we don't count validation pipeline into test)
+    test_pipe_duration = end_time - test_pipe_start
+    total_test_duration += test_pipe_duration
+
+    results["total_time"] = total_duration
+    results["test_time"] = total_test_duration
+    return results
 
 
 if __name__ == "__main__":
