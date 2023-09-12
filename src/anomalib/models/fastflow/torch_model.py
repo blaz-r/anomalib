@@ -22,6 +22,7 @@ from torch import Tensor, nn
 
 from anomalib.models.components.flow import AllInOneBlock
 from anomalib.models.fastflow.anomaly_map import AnomalyMapGenerator
+from anomalib.pre_processing import Tiler
 
 
 def subnet_conv_func(kernel_size: int, hidden_ratio: float) -> Callable:
@@ -104,6 +105,7 @@ class FastflowModel(nn.Module):
         flow_steps (int, optional): Flow steps.
         conv3x3_only (bool, optinoal): Use only conv3x3 in fast_flow model. Defaults to False.
         hidden_ratio (float, optional): Ratio to calculate hidden var channels. Defaults to 1.0.
+        image_size (tuple[int, int] | None): Original image size (needed in case of tiling).
 
     Raises:
         ValueError: When the backbone is not supported.
@@ -117,10 +119,14 @@ class FastflowModel(nn.Module):
         flow_steps: int = 8,
         conv3x3_only: bool = False,
         hidden_ratio: float = 1.0,
+        image_size: tuple[int, int] | None = None,
     ) -> None:
         super().__init__()
+        self.tiler: Tiler | None = None
 
         self.input_size = input_size
+        if not image_size:
+            image_size = input_size
 
         if backbone in ("cait_m48_448", "deit_base_distilled_patch16_384"):
             self.feature_extractor = timm.create_model(backbone, pretrained=pre_trained)
@@ -165,7 +171,7 @@ class FastflowModel(nn.Module):
                     flow_steps=flow_steps,
                 )
             )
-        self.anomaly_map_generator = AnomalyMapGenerator(input_size=input_size)
+        self.anomaly_map_generator = AnomalyMapGenerator(input_size=image_size)
 
     def forward(self, input_tensor: Tensor) -> Tensor | list[Tensor] | tuple[list[Tensor]]:
         """Forward-Pass the input to the FastFlow Model.
@@ -180,6 +186,9 @@ class FastflowModel(nn.Module):
         """
 
         return_val: Tensor | list[Tensor] | tuple[list[Tensor]]
+
+        if self.tiler:
+            input_tensor = self.tiler.tile(input_tensor)
 
         self.feature_extractor.eval()
         if isinstance(self.feature_extractor, VisionTransformer):
@@ -202,6 +211,11 @@ class FastflowModel(nn.Module):
         return_val = (hidden_variables, log_jacobians)
 
         if not self.training:
+            # only untile non-training data because Jacobians can't be untiled
+            if self.tiler:
+                for i, data in enumerate(hidden_variables):
+                    hidden_variables[i] = self.tiler.untile(data)
+
             return_val = self.anomaly_map_generator(hidden_variables)
 
         return return_val

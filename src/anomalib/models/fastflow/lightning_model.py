@@ -21,6 +21,7 @@ class Fastflow(AnomalyModule):
 
     Args:
         input_size (tuple[int, int]): Model input size.
+        image_size (tuple[int, int]): Original image size (needed in case of tiling).
         backbone (str): Backbone CNN network
         pre_trained (bool, optional): Boolean to check whether to use a pre_trained backbone.
         flow_steps (int, optional): Flow steps.
@@ -36,6 +37,7 @@ class Fastflow(AnomalyModule):
         flow_steps: int = 8,
         conv3x3_only: bool = False,
         hidden_ratio: float = 1.0,
+        image_size: tuple[int, int] | None = None,
     ) -> None:
         super().__init__()
 
@@ -46,6 +48,7 @@ class Fastflow(AnomalyModule):
             flow_steps=flow_steps,
             conv3x3_only=conv3x3_only,
             hidden_ratio=hidden_ratio,
+            image_size=image_size,
         )
         self.loss = FastflowLoss()
 
@@ -90,8 +93,15 @@ class FastflowLightning(Fastflow):
     """
 
     def __init__(self, hparams: DictConfig | ListConfig) -> None:
+        # if we use tiling, input size of model needs to be same as tile size
+        if hparams.dataset.tiling.apply:
+            input_size = hparams.dataset.tiling.tile_size
+        else:
+            input_size = hparams.model.input_size
+
         super().__init__(
-            input_size=hparams.model.input_size,
+            input_size=input_size,
+            image_size=hparams.dataset.image_size,
             backbone=hparams.model.backbone,
             pre_trained=hparams.model.pre_trained,
             flow_steps=hparams.model.flow_steps,
