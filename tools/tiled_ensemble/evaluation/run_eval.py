@@ -67,7 +67,7 @@ def train_all_from_conf():
 
                             model_config = OmegaConf.load(MODEL_CONFIGS_PATH / f"{arch}.yaml")
 
-                            model_config.dataset.num_workers = 0    # TODO
+                            # model_config.dataset.num_workers = 0
                             model_config.project.seed = seed
                             model_config.dataset.format = dataset
                             model_config.dataset.name = f"{dataset}_{setup}"
