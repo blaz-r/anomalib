@@ -36,10 +36,10 @@ model:
   lr: 0.4
   momentum: 0.9
   weight_decay: 0.0001
-  early_stopping:
-    patience: 5
-    metric: pixel_AUROC
-    mode: max
+#  early_stopping:
+#    patience: 5
+#    metric: pixel_AUROC
+#    mode: max
   normalization_method: min_max # options: [null, min_max, cdf]
 
 metrics:
@@ -66,7 +66,6 @@ visualization:
 project:
   seed: 0
   path: ./results
-  unique_dir: True
 
 logging:
   logger: [] # options: [comet, tensorboard, wandb, csv] or combinations.
@@ -76,7 +75,7 @@ optimization:
   export_mode: null # options: torch, onnx, openvino
 # PL Trainer Args. Don't add extra parameter here.
 trainer:
-  enable_checkpointing: true
+  enable_checkpointing: false
   default_root_dir: null
   gradient_clip_val: 0
   gradient_clip_algorithm: norm

@@ -35,12 +35,12 @@ model:
     - layer1
     - layer2
     - layer3
-  early_stopping:
-    patience: 3
-    metric: pixel_AUROC
-    mode: max
+#  early_stopping:
+#    patience: 3
+#    metric: pixel_AUROC
+#    mode: max
   beta1: 0.5
-  beta2: 0.99
+  beta2: 0.999
   normalization_method: min_max # options: [null, min_max, cdf]
   anomaly_map_mode: multiply
 
@@ -68,7 +68,6 @@ visualization:
 project:
   seed: 42
   path: ./results
-  unique_dir: True
 
 logging:
   logger: [] # options: [comet, tensorboard, wandb, csv] or combinations.
@@ -79,7 +78,7 @@ optimization:
 
 # PL Trainer Args. Don't add extra parameter here.
 trainer:
-  enable_checkpointing: true
+  enable_checkpointing: false
   default_root_dir: null
   gradient_clip_val: 0
   gradient_clip_algorithm: norm

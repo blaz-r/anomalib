@@ -34,10 +34,10 @@ model:
   conv3x3_only: True # options: [True, False, False, False] - for each supported backbone
   lr: 0.001
   weight_decay: 0.00001
-  early_stopping:
-    patience: 3
-    metric: pixel_AUROC
-    mode: max
+#  early_stopping:
+#    patience: 3
+#    metric: pixel_AUROC
+#    mode: max
   normalization_method: min_max # options: [null, min_max, cdf]
 
 metrics:
@@ -64,7 +64,6 @@ visualization:
 project:
   seed: 42
   path: ./results
-  unique_dir: True
 
 logging:
   logger: [] # options: [comet, tensorboard, wandb, csv] or combinations.
@@ -75,7 +74,7 @@ optimization:
 
 # PL Trainer Args. Don't add extra parameter here.
 trainer:
-  enable_checkpointing: true
+  enable_checkpointing: false
   default_root_dir: null
   gradient_clip_val: 0
   gradient_clip_algorithm: norm
