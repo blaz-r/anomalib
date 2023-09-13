@@ -202,7 +202,9 @@ def get_ensemble_callbacks(config: DictConfig | ListConfig, tile_index: tuple[in
         auto_insert_metric_name=False,
     )
 
-    callbacks.extend([checkpoint, TimerCallback()])
+    # callbacks.extend([checkpoint, TimerCallback()])
+    callbacks.extend([TimerCallback()])
+
 
     if "resume_from_checkpoint" in config.trainer.keys() and config.trainer.resume_from_checkpoint is not None:
         load_model = LoadModelCallback(config.trainer.resume_from_checkpoint)

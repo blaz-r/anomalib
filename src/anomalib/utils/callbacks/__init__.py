@@ -68,7 +68,9 @@ def get_callbacks(config: DictConfig | ListConfig) -> list[Callback]:
         auto_insert_metric_name=False,
     )
 
-    callbacks.extend([checkpoint, TimerCallback()])
+    # callbacks.extend([checkpoint, TimerCallback()])
+    # experiment without checkpoints
+    callbacks.extend([TimerCallback()])
 
     if "resume_from_checkpoint" in config.trainer.keys() and config.trainer.resume_from_checkpoint is not None:
         load_model = LoadModelCallback(config.trainer.resume_from_checkpoint)
@@ -151,6 +153,13 @@ def get_callbacks(config: DictConfig | ListConfig) -> list[Callback]:
         stride=config.dataset.tiling.stride,
     )
     callbacks.append(tiling)
+
+    # tiling = TilerConfigurationCallback(
+    #     enable=config.dataset.tiling.apply,
+    #     tile_size=config.dataset.tiling.tile_size,
+    #     stride=config.dataset.tiling.stride,
+    # )
+    # callbacks.append(tiling)
 
     return callbacks
 

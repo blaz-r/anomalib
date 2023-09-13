@@ -117,7 +117,7 @@ def train(args: Namespace):
             test_start_time = time.time()
 
             current_predictions = trainer.predict(
-                model=model, dataloaders=datamodule.test_dataloader(), ckpt_path="best"
+                model=model, dataloaders=datamodule.test_dataloader()
             )
             ensemble_predictions.add_tile_prediction(tile_index, current_predictions)
 

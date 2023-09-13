@@ -142,9 +142,10 @@ class ReverseDistillationLightning(ReverseDistillation):
                 deprecated, and callbacks will be configured from either
                 config.yaml file or from CLI.
         """
-        early_stopping = EarlyStopping(
-            monitor=self.hparams.model.early_stopping.metric,
-            patience=self.hparams.model.early_stopping.patience,
-            mode=self.hparams.model.early_stopping.mode,
-        )
-        return [early_stopping]
+        return []
+        # early_stopping = EarlyStopping(
+        #     monitor=self.hparams.model.early_stopping.metric,
+        #     patience=self.hparams.model.early_stopping.patience,
+        #     mode=self.hparams.model.early_stopping.mode,
+        # )
+        # return [early_stopping]
