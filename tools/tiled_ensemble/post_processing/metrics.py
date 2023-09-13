@@ -115,7 +115,9 @@ class EnsembleMetrics(EnsemblePostProcess):
 
         if self.pixel_metrics.update_called:
             for name, metric in self.pixel_metrics.items():
+                metric.cuda()
                 out[name] = metric.compute().item()
+                metric.cpu()
 
         return out
 
