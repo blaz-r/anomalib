@@ -9,7 +9,6 @@ architectures:
   - padim
   - fastflow
   - reverse_distillation
-  - stfpm
   - patchcore
 
 setups:
@@ -47,6 +46,19 @@ setups:
 
 
 datasets:
+  visa:
+    - candle
+    - capsules
+    - cashew
+    - chewinggum
+    - fryum
+    - macaroni1
+    - macaroni2
+    - pcb1
+    - pcb2
+    - pcb3
+    - pcb4
+    - pipe_fryum
   mvtec:
     - bottle
     - cable
@@ -63,16 +75,3 @@ datasets:
     - transistor
     - wood
     - zipper
-  visa:
-    - candle
-    - capsules
-    - cashew
-    - chewinggum
-    - fryum
-    - macaroni1
-    - macaroni2
-    - pcb1
-    - pcb2
-    - pcb3
-    - pcb4
-    - pipe_fryum

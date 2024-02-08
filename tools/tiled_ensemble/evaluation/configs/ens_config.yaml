@@ -22,7 +22,6 @@ metrics:
     - F1Score
     - AUROC
     - AUPRO
-    - PRO
   threshold:
     stage: image # stage at which we apply threshold, options: [tile, image]
     method: adaptive # options: [adaptive, manual]

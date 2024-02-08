@@ -48,7 +48,6 @@ metrics:
     - F1Score
     - AUROC
     - AUPRO
-    - PRO
   threshold:
     method: adaptive #options: [adaptive, manual]
     manual_image: null
@@ -86,9 +85,9 @@ trainer:
   check_val_every_n_epoch: 1 # Don't validate before extracting features.
   fast_dev_run: false
   accumulate_grad_batches: 1
-  max_epochs: 500
+  max_epochs: -1
   min_epochs: null
-  max_steps: -1
+  max_steps: 200
   min_steps: null
   max_time: null
   limit_train_batches: 1.0
