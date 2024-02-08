@@ -51,7 +51,6 @@ def train_all_from_conf():
                     "pixel_F1Score",
                     "pixel_AUROC",
                     "pixel_AUPRO",
-                    "pixel_PRO",
                     "total_time",
                     "test_time",
                     "cuda_memory"
@@ -84,7 +83,7 @@ def train_all_from_conf():
                             else:
                                 model_config.dataset.tiling.apply = False
 
-                            current_model_config_path = MODIFIED_CONFIGS_PATH / f"{arch}.yaml"
+                            current_model_config_path = MODIFIED_CONFIGS_PATH / setup / f"{arch}.yaml"
                             OmegaConf.save(model_config, current_model_config_path)
 
                             if setup.startswith("ens"):
@@ -96,7 +95,7 @@ def train_all_from_conf():
                                 # only save imgs for first seed run
                                 ens_config.visualization.save_images = (cycle == 0)
 
-                                current_ens_config_path = MODIFIED_CONFIGS_PATH / "ens_config.yaml"
+                                current_ens_config_path = MODIFIED_CONFIGS_PATH / setup / "ens_config.yaml"
                                 OmegaConf.save(ens_config, current_ens_config_path)
 
                                 arglist = ["--model_config", str(current_model_config_path),
@@ -139,7 +138,6 @@ def train_all_from_conf():
                                         results["pixel_F1Score"],
                                         results["pixel_AUROC"],
                                         results["pixel_AUPRO"],
-                                        results["pixel_PRO"],
                                         results["total_time"],
                                         results["test_time"],
                                         results["cuda_memory"],
