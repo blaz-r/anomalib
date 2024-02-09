@@ -4,8 +4,8 @@ dataset:
   path: setupInCode
   category: setupInCode
   task: segmentation
-  train_batch_size: 32
-  eval_batch_size: 32
+  train_batch_size: 8
+  eval_batch_size: 8
   num_workers: 8
   image_size: setupInCode # dimensions to which images are resized (mandatory)
   center_crop: null # dimensions to which images are center-cropped after resizing (optional)
