@@ -242,8 +242,9 @@ def post_process(
 
         # save stats to json for later use in inference
         logger.info("Saving statistics to project directory.")
-        stats_path = Path(config.project.path) / "weights" / "lightning" / "stats.json"
-        with open(stats_path, "w", encoding="utf-8") as stats_file:
+        stats_path = Path(config.project.path) / "weights" / "lightning"
+        stats_path.mkdir(parents=True, exist_ok=True)
+        with open(stats_path / "stats.json", "w", encoding="utf-8") as stats_file:
             json.dump(stats, stats_file, ensure_ascii=False, indent=4)
     else:
         logger.info("Using the provided normalization and threshold statistics.")
