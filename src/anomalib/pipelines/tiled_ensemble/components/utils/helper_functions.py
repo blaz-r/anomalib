@@ -125,9 +125,14 @@ def get_ensemble_model(
         if isinstance(pre_transforms, Resize):
             update_transform = []
         elif isinstance(pre_transforms, Compose):
-            update_transform = Compose([
+            filtered_transforms = [
                 transform for transform in pre_transforms.transforms if not isinstance(transform, Resize)
-            ])
+            ]
+            # avoid empty compose
+            if len(filtered_transforms):
+                update_transform = Compose(filtered_transforms)
+            else:
+                update_transform = None
         elif pre_transforms is not None:
             update_transform = pre_transforms
         else:
