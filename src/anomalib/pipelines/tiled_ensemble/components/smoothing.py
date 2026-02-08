@@ -96,6 +96,8 @@ class SmoothingJob(Job):
 
         logger.info("Starting seam smoothing.")
 
+        self.blur.to(self.accelerator)
+
         for data in tqdm(self.predictions, desc="Seam smoothing"):
             # move to specified accelerator for faster execution
             data.anomaly_map = data.anomaly_map.to(self.accelerator)
